@@ -28,14 +28,14 @@ the program should print the total amount paid by the user
 
 
 # working
-loan_registry {bank_name: {borrower_name: {loan_id:str, principal:int, rate_of_int:float, n_yrs:float, default_emis:int, lump_sum_payment_emis:[]}}
+loan_registry {bank_name: {borrower_name: {loan_id:str, principal:int, rate_of_int:float, n_yrs:float, default_emis:int}}
 payments_registry {loan_id:[[latest_emi_no_at_time_of_payment,lump_sum]]}
 results_cache {loan_id:{}}  can we use this for preventing a full calculation?
 LOAN -> add_keys
 
 loans Intf-> SimpleLoan
 
-# the need to store separate lump_sum_payment_emis and payments_as_kv instead of list
+#  is there a need to store separate lump_sum_payment_emis and payments_as_kv instead of list
     useful metadata for any kind of analysis
     if emi:payment is stored as kv, then it can be easier to do back filling if needed
     
