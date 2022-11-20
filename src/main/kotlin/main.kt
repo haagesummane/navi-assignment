@@ -22,19 +22,19 @@ fun executeCommands(loanMgr: LoanInterface, fileName: String) {
                 when (cmd) {
                     Commands.LOAN -> {
                         loanMgr.initLoan(
-                            bankName = params[1], borrowerName = params[2], principal = params[3].toDouble(),
-                            numYrs = params[4].toDouble(), rateOfInterest = params[5].toDouble()
+                            bankName = params[0], borrowerName = params[1], principal = params[2].toDouble(),
+                            numYrs = params[3].toDouble(), rateOfInterest = params[4].toDouble()
                         )
                     }
                     Commands.PAYMENT -> {
                         loanMgr.processPaymentInfo(
-                            bankName = params[1], borrowerName = params[2],
-                            lumpSumPaymentAmt = params[3].toDouble(), latestEmiNum = params[4].toInt()
+                            bankName = params[0], borrowerName = params[1],
+                            lumpSumPaymentAmt = params[2].toDouble(), latestEmiNum = params[3].toInt()
                         )
                     }
                     Commands.BALANCE -> {
-                        loanMgr.getBalance(bankName = params[1], borrowerName = params[2], emiNum = params[3].toInt())
-                            .let { bal -> println("${params[1]} ${params[2]} ${bal.amtPaid} ${bal.numEmiLeft} ") }
+                        loanMgr.getBalance(bankName = params[0], borrowerName = params[1], emiNum = params[2].toInt())
+                            .let { bal -> println("${params[0]} ${params[1]} ${bal.amtPaid} ${bal.numEmiLeft} ") }
                     }
 
                 }
@@ -44,5 +44,8 @@ fun executeCommands(loanMgr: LoanInterface, fileName: String) {
 }
 
 fun main(args: Array<String>) {
-    executeCommands(loanMgr = SimpleInterestLoan(), fileName = "input.txt")
+    executeCommands(
+        loanMgr = SimpleInterestLoan(),
+        fileName = "/Users/manu/dev/_interviews/navi/src/main/kotlin/input.txt"
+    )
 }
