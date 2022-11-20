@@ -12,7 +12,7 @@ class SimpleInterestLoan : AbstractLoan() {
     }
 
     override fun calculateOutstanding(loanInfo: LoanInfo, emiNum: Int): Balance {
-        val totalAmt = calculateInterest(loanInfo) + loanInfo.principal;
+        val totalAmt = ceil(calculateInterest(loanInfo) + loanInfo.principal).toInt();
         val emiAmt = ceil(totalAmt / (loanInfo.numYrs * 12.0))
 
         val paymentViaEmi = emiNum * emiAmt;
@@ -21,7 +21,7 @@ class SimpleInterestLoan : AbstractLoan() {
 
         val outstanding = totalAmt - totalAmtPaid
         val outstandingNumEmi = ceil(outstanding / emiAmt).toInt()
-        return Balance(amtPaid = totalAmtPaid, numEmiLeft = outstandingNumEmi)
+        return Balance(amtRemaining = outstanding, amtPaid = totalAmtPaid, numEmiLeft = outstandingNumEmi)
     }
 
 }

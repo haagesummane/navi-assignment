@@ -1,4 +1,4 @@
-package loans.common
+package loans.common.data
 
 import LoanInfo
 import LumpSumPayment

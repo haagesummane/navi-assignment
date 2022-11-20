@@ -1,9 +1,6 @@
 import loans.common.LoanInterface
 import java.io.File
 
-enum class Commands {
-    LOAN, PAYMENT, BALANCE
-}
 
 class LoansManager(private val loanMgr: LoanInterface) {
 
@@ -33,12 +30,12 @@ class LoansManager(private val loanMgr: LoanInterface) {
                             )
                         }
                         Commands.BALANCE -> {
-                            loanMgr.getBalance(
+                            val bal = loanMgr.getBalance(
                                 bankName = params[0],
                                 borrowerName = params[1],
                                 emiNum = params[2].toInt()
                             )
-                                .let { bal -> println("${params[0]} ${params[1]} ${bal.amtPaid} ${bal.numEmiLeft} ") }
+                            println("${params[0]} ${params[1]} ${bal.amtPaid} ${bal.numEmiLeft} ")
                         }
 
                     }

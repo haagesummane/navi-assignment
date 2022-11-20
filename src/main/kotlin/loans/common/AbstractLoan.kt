@@ -3,6 +3,8 @@ package loans.common
 import Balance
 import LoanInfo
 import LumpSumPayment
+import loans.common.data.LoanRegistry
+import loans.common.data.PaymentsRegistry
 import java.lang.Exception
 
 
@@ -52,16 +54,19 @@ abstract class AbstractLoan : LoanInterface {
 
         val payment = LumpSumPayment(latestEmiNum, lumpSumPaymentAmt)
 
-        val loanId = loansRegistry.getLoanId(bankName, borrowerName)
+        val loanInfo = loansRegistry.getLoan(bankName, borrowerName)
             ?: throw Exception("Loan from $bankName to $borrowerName not found")
 
-        paymentsRegistry.addPayment(loanId, payment)
-        loansRegistry.updateTotalLumpSum(loanId, payment)
+        if (payment.paymentAmount > calculateOutstanding(loanInfo, latestEmiNum).amtRemaining)
+            throw Exception("Lump sum payment cannot exceed current outstanding")
+
+        paymentsRegistry.addPayment(loanInfo.loanId, payment)
+        loansRegistry.updateTotalLumpSum(loanInfo.loanId, payment)
     }
 
     override fun getBalance(bankName: String, borrowerName: String, emiNum: Int): Balance {
         checkEmiVal(emiNum)
-        val loanInfo = loansRegistry.getLoan(bankName, borrowerName) ?: return Balance(0, -1)
+        val loanInfo = loansRegistry.getLoan(bankName, borrowerName) ?: return Balance(0, 0, -1)
         return calculateOutstanding(loanInfo, emiNum)
     }
 

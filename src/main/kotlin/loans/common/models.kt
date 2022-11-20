@@ -1,3 +1,7 @@
+enum class Commands {
+    LOAN, PAYMENT, BALANCE
+}
+
 data class LumpSumPayment(
     var latestEmiNo: Int,
     var paymentAmount: Double
@@ -19,6 +23,7 @@ data class LoanInfo(
 
 
 data class Balance(
+    val amtRemaining:Int,
     val amtPaid: Int,
     val numEmiLeft: Int
 )
