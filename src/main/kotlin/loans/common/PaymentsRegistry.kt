@@ -19,7 +19,7 @@ class PaymentsRegistry {
         return (paymentsRegistry[loanInfo.loanId]?.filter { it.key <= emiNum }?.map { it.value }?.sum()) ?: 0.0
     }
 
-    fun getPaymentsTillEmi(loanId: String, emiNum: Int): List<LumpSumPayment>? {
-        return paymentsRegistry[loanId]?.filter { it.key <= emiNum }?.map { LumpSumPayment(it.key, it.value) }
-    }
+//    fun getPaymentsTillEmi(loanId: String, emiNum: Int): List<LumpSumPayment>? {
+//        return paymentsRegistry[loanId]?.filter { it.key <= emiNum }?.map { LumpSumPayment(it.key, it.value) }
+//    }
 }

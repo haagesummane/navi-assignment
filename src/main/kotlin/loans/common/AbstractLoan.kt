@@ -67,6 +67,4 @@ abstract class AbstractLoan : LoanInterface {
 
     abstract fun calculateInterest(loanInfo: LoanInfo): Double
     abstract fun calculateOutstanding(loanInfo: LoanInfo, emiNum: Int): Balance
-
-
 }

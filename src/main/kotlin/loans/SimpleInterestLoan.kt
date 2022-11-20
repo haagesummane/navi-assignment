@@ -5,14 +5,7 @@ import LoanInfo
 import loans.common.AbstractLoan
 import kotlin.math.ceil
 
-
 class SimpleInterestLoan : AbstractLoan() {
-    init {
-        println("Initiating Simple Interest Loan Manager")
-    }
-
-    // get payments till emi
-    // calculate outstanding emis
 
     override fun calculateInterest(loanInfo: LoanInfo): Double {
         return loanInfo.principal * loanInfo.numYrs * loanInfo.rateOfInterest
