@@ -1,36 +1,48 @@
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import loans.SimpleInterestLoan
+import loans.common.LoanInterface
+import java.io.File
 
-fun simpleFlow()=flow{
-    for( i in 1..3)
-    {
-        delay(100)
-        emit(i+(i*i))
+
+enum class Commands {
+    LOAN, PAYMENT, BALANCE
+}
+
+fun parseInput(line: String): Pair<Commands, List<String>>? {
+    val values = line.split(' ').map { it.trim() }
+    val commandStr = values.first().uppercase()
+    val cmd = enumValues<Commands>().find { it.name == commandStr } ?: return null
+    return Pair(cmd, values.subList(1, values.lastIndex + 1))
+}
+
+fun executeCommands(loanMgr: LoanInterface, fileName: String) {
+    File(fileName).forEachLine { line ->
+        run {
+            parseInput(line)?.let {
+                val (cmd, params) = it
+                when (cmd) {
+                    Commands.LOAN -> {
+                        loanMgr.initLoan(
+                            bankName = params[1], borrowerName = params[2], principal = params[3].toDouble(),
+                            numYrs = params[4].toDouble(), rateOfInterest = params[5].toDouble()
+                        )
+                    }
+                    Commands.PAYMENT -> {
+                        loanMgr.processPaymentInfo(
+                            bankName = params[1], borrowerName = params[2],
+                            lumpSumPaymentAmt = params[3].toDouble(), latestEmiNum = params[4].toInt()
+                        )
+                    }
+                    Commands.BALANCE -> {
+                        loanMgr.getBalance(bankName = params[1], borrowerName = params[2], emiNum = params[3].toInt())
+                            .let { bal -> println("${params[1]} ${params[2]} ${bal.amtPaid} ${bal.numEmiLeft} ") }
+                    }
+
+                }
+            }
+        }
     }
 }
 
-
-fun main(args: Array<String>) = runBlocking{
-    println("Hello World!")
-    println(listOf("a","b","cccc").associate { it.length to it  })
-
-    val stuff = listOf("a","b",null,null)
-    println(stuff.last().orEmpty())
-
-    val paymentsRegistry = mapOf("1111" to mutableMapOf(11 to 22.2));
-    paymentsRegistry["1111"]?.putAll(mapOf(22 to 222.1,33 to 333.1))
-    println(paymentsRegistry)
-
-    launch{
-        for(i in 1..50){
-            print(" $i")
-            delay(10)
-        }
-    }
-    val sfres = simpleFlow()
-    println("Collecting the flow")
-    sfres.collect { println("\ncollected $it") }
+fun main(args: Array<String>) {
+    executeCommands(loanMgr = SimpleInterestLoan(), fileName = "input.txt")
 }
